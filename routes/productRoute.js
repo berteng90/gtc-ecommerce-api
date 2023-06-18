@@ -14,6 +14,7 @@ productRouter.get("/categories", async (req, res) => {
       ID: category.ID,
       Category: category.Category,
       CategoryImagePath: category.ImagePath,
+      CategoryCode: category.CategoryCode,
       CategoryImage: category.Img,
     }));
     res.send(response).status(200);
@@ -53,13 +54,53 @@ productRouter.use("/deals", async (req, res) => {
     "SELECT API_Item_DealsOfTheDay.ItemID, Name, Description,SpecialPrice, Image FROM API_Item_DealsOfTheDay  INNER JOIN API_Item_InventoryMaster ON API_Item_InventoryMaster.ItemID=API_Item_DealsOfTheDay.ItemID"
   );
   const response = (await query).recordset.map((item) => ({
-    ItemID: item.ItemID,
+    ID: item.ItemID,
     ItemName: item.Name,
     ItemDescription: item.Description,
     ItemSpecialPrice: item.SpecialPrice,
     ItemImage: item.Image,
   }));
   res.send(response).status(200);
+  sql.close();
+});
+
+//Fetch Products based on Category
+productRouter.get("/categorycode/:categorycode", async (req, res) => {
+  await connect();
+  const { categorycode } = req.params;
+  const request = new sql.Request();
+  request.input("category", sql.VarChar, categorycode);
+  const query = request.query(
+    "SELECT * FROM API_Item_InventoryMaster WHERE CategoryCode = @category"
+  );
+  const data = (await query).recordset.map((item) => ({
+    ID: item.itemID,
+    ItemName: item.Name,
+    ItemDescription: item.Description,
+    ItemPrice: item.Price,
+    ItemImage: item.Image,
+  }));
+  res.send(data).status(200);
+  sql.close();
+});
+
+//Fetch Products based on Product Name
+productRouter.get("/name/:name", async (req, res) => {
+  await connect();
+  const { name } = req.params;
+  const request = new sql.Request();
+  request.input("name", sql.VarChar, name);
+  const query = request.query(
+    "SELECT * FROM API_Item_InventoryMaster WHERE Name LIKE '%' + @name + '%'"
+  );
+  const data = (await query).recordset.map((item) => ({
+    ID: item.itemID,
+    ItemName: item.Name,
+    ItemDescription: item.Description,
+    ItemPrice: item.Price,
+    ItemImage: item.Image,
+  }));
+  res.status(200).send(data);
   sql.close();
 });
 
