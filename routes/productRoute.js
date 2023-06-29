@@ -1,6 +1,5 @@
 const express = require("express");
 const productRouter = express.Router();
-const data = require("../DummyData.json");
 const sql = require("mssql");
 const connect = require("../config/sqlConfig");
 
