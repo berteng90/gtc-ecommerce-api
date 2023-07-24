@@ -88,7 +88,7 @@ productRouter.get("/name/:name", async (req, res) => {
   await connect();
   const { name } = req.params;
   const request = new sql.Request();
-  request.input("name ", sql.VarChar, name);
+  request.input("name", sql.VarChar, name);
   const query = request.query(
     "SELECT Item_InventoryMaster.ItemId as [itemID],ItemDescription as [itemName],Notes as [itemDescription],CategoryCode as [categoryCode],UOMCode as [uomCode],  SUM(QtyIN-QtyOUT) as [stockCount], Price2 as [retailPrice], PictPath as [imagePath] FROM Item_InventoryMaster INNER JOIN Item_InvoiceBatchDetailed ON Item_InvoiceBatchDetailed.ItemID=Item_InventoryMaster.ItemID INNER JOIN Item_MeasurableUOM ON Item_MeasurableUOM.ItemID=Item_InventoryMaster.ItemID AND Item_MeasurableUOM.Branch=15 INNER JOIN Item_RelationUOM ON Item_RelationUOM.MeasureID=Item_MeasurableUOM.MeasureID AND Item_RelationUOM.Branch=Item_MeasurableUOM.Branch INNER JOIN Item_UOMMaster ON Item_UOMMaster.UOMID=Item_RelationUOM.UOMId WHERE Item_InvoiceBatchDetailed.Branch=15 AND ItemDescription like '%' + @name + '%'  GROUP BY Item_InventoryMaster.ItemId,ItemDescription,Notes,UOMCode, Price2, CategoryCode, PictPath"
   );

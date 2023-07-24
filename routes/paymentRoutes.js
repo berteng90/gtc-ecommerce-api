@@ -68,7 +68,6 @@ paymentRouter.get("/paymentMethod", async (req, res) => {
       options
     );
     const data = await response.json();
-    console.log(data);
     res.send(data).status(200);
   } catch (error) {}
 });
@@ -98,14 +97,12 @@ paymentRouter.get("/attach", async (req, res) => {
       `https://api.paymongo.com/v1/payment_intents/pi_7MWcxRU2BJr5JN5q9HhvhNkZ/attach`
     );
     const data = await response.json();
-    console.log(data);
     res.send(data).status(200);
   } catch (error) {}
 });
 
 paymentRouter.post("/checkout", async (req, res) => {
   const checkoutInfo = req.body;
-  console.log(JSON.stringify(checkoutInfo));
   try {
     const response = await fetch(
       "https://api.paymongo.com/v1/checkout_sessions",
