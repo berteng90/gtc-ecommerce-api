@@ -8,10 +8,9 @@ userRouter.post("/login/facebook", async (req, res) => {
 
   try {
     // Step 1: Verify the access token with Facebook's API
-    const facebookAppId = "1241536593391322";
-    const facebookAppSecret = "2159ba25dca8e9e17afa93e411703318";
+
     const appAccessTokenResponse = await fetch.get(
-      `https://graph.facebook.com/oauth/access_token?client_id=1241536593391322&client_secret=2159ba25dca8e9e17afa93e411703318&grant_type=client_credentials`
+      `https://graph.facebook.com/oauth/access_token?client_id=${test}&client_secret=${test}&grant_type=client_credentials`
     );
     const appAccessToken = appAccessTokenResponse.data.access_token;
 
